@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <titele>JS18</titele>
+</head>
+<style>
+    @import url("style1.css");
+</style>
+<div id="controller">
+    <input type="text" id="rowsField" placeholder="Rows">
+    <input type="text" id="columnsField" placeholder="Columns">
+    <button type="button" id="createButton">Make</button>
+    <br><br>
+    <button type="button" id="actionButton">Push it</button>
+</div>
+<br><br>
+<br><br>
+<br><br>
+<div id="container"></div>
+<script>
+///////////////////////////////////////////////////////
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+createButton.addEventListener('click', make)
+actionButton.addEventListener('click', movement)
+////////////////////////////////////////////////////////////
+let rows, columns
+function make() {
+    rows = +rowsField.value
+    columns = +columnsField.value
+    let table = document.querySelector('table')
+    if (table) table.remove()
+    table = document.createElement('table')
+    for (let i = 0; i < rows; i++) {
+        let tr = document.createElement('tr')
+        for (let j = 0; j < columns; j++) {
+            let cell = document.createElement('td')
+            cell.setAttribute('id', i + '_' + j)
+            tr.appendChild(cell)
+        }
+        table.appendChild(tr)
+    }
+    container.appendChild(table)
+}
+
+async function movement() {
+    let table = document.querySelector('table'), cell, act, remAct
+    let random = Math.round(Math.random())
+    if (random) {
+        act = () => cell.innerHTML = '🛑'
+        remAct = () => cell.innerHTML = ''
+    }
+    for (let j = 0; j < columns; j++) {
+        cell = document.getElementById('0_' + j)
+        act()
+        await sleep(40)
+        remAct()
+    }
+    for (let i = 0; i < rows; i++) {
+        cell = document.getElementById(i + '_' + (columns - 1))
+        act()
+        await sleep(40)
+        remAct()
+    }
+    for (let j = columns - 1; j >= 0; j--) {
+        cell = document.getElementById((rows - 1) + '_' + j)
+        act()
+        await sleep(40)
+        remAct()
+    }
+    for (let i = rows - 1; i >= 0; i--) {
+        cell = document.getElementById(i + '_0')
+        act()
+        await sleep(40)
+        remAct()
+    }
+}
+</script>
+</body>
+</html>
